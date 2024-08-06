@@ -1,6 +1,4 @@
 package demo.fitnessapp.entities.concretes;
-
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -8,20 +6,27 @@ import lombok.*;
 
 @Data
 @Entity
-@Table(name = "exercises")
+@Table(name = "workouts")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Exercises {
+public class Workouts {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private int id;
 
-    @Column(name = "name")
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "exercises_id")
+    private Exercises exercises;
+
+    @Column(name = "sets")
+    private int sets;
+
+    @Column(name = "repeats")
+    private int repeats;
+    
 
 }
