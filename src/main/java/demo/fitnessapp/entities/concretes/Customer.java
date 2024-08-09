@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -31,15 +32,13 @@ public class Customer {
     @Column(name = "phonenumber")
     private String phoneNumber;
 
-    @Column(name = "date_of_birth")
+    @Column(name = "dateofbirth")
     private LocalDate dateOfBirth;
 
     @Column(name = "steps")
     private int steps;
 
-    @Column(name = "heart_rate")
+    @Column(name = "heartrate")
     private double heartRate;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CaloriesBurned> caloriesBurnedRecords;
 }
