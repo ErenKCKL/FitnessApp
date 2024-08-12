@@ -31,7 +31,6 @@ public class CustomerService {
             customer.setEmail(customerDetails.getEmail());
             customer.setPassword(customerDetails.getPassword());
             customer.setPhoneNumber(customerDetails.getPhoneNumber());
-            customer.setDateOfBirth(customerDetails.getDateOfBirth());
             customer.setSteps(customerDetails.getSteps());
             customer.setHeartRate(customerDetails.getHeartRate());
             return customerRepository.save(customer);

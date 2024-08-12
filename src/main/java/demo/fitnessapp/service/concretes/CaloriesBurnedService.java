@@ -14,16 +14,10 @@ public class CaloriesBurnedService {
     private CaloriesBurnedRepository caloriesBurnedRepository;
 
     @Autowired
-    private HeightRepository heightRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
-    private WeightRepository weightRepository;
-
-    @Autowired
-    private SleepHoursRepository sleepHoursRepository;
-
-    @Autowired
-    private WorkoutsRepository workoutRepository;
+    private TrainingProgramsRepository trainingProgramsRepository;
 
     public List<CaloriesBurned> getAllCaloriesBurned() {
         return caloriesBurnedRepository.findAll();
@@ -34,27 +28,20 @@ public class CaloriesBurnedService {
     }
 
     public CaloriesBurned createCaloriesBurned(CaloriesBurned caloriesBurned) {
-        // Veritabanından nesneleri al
-        Height height = heightRepository.findById(caloriesBurned.getHeight().getId()).orElse(null);
-        Weight weight = weightRepository.findById(caloriesBurned.getWeight().getId()).orElse(null);
-        SleepHours sleepHours = sleepHoursRepository.findById(caloriesBurned.getSleepHours().getId()).orElse(null);
-        Workouts workout = workoutRepository.findById(caloriesBurned.getWorkout().getId()).orElse(null);
+        // Fetch the related entities from the database
+        Customer customer = customerRepository.findById(caloriesBurned.getCustomer().getId()).orElse(null);
+        TrainingPrograms trainingProgram = trainingProgramsRepository.findById(caloriesBurned.getTrainingProgram().getId()).orElse(null);
 
-        // Null kontrolü ve loglama
-        if (height == null || weight == null || sleepHours == null || workout == null) {
+        // Null check and logging
+        if (customer == null || trainingProgram == null) {
             throw new RuntimeException("One of the related entities is not found");
         }
 
-        System.out.println("Retrieved from DB - Height: " + height.getHeight());
-        System.out.println("Retrieved from DB - Weight: " + weight.getWeight());
-        System.out.println("Retrieved from DB - Sleep Hours: " + sleepHours.getSleepHours());
-        System.out.println("Retrieved from DB - Workout Sets: " + workout.getSets());
-        System.out.println("Retrieved from DB - Workout Repeats: " + workout.getRepeats());
+        System.out.println("Retrieved from DB - Customer ID: " + customer.getId());
+        System.out.println("Retrieved from DB - Training Program ID: " + trainingProgram.getId());
 
-        caloriesBurned.setHeight(height);
-        caloriesBurned.setWeight(weight);
-        caloriesBurned.setSleepHours(sleepHours);
-        caloriesBurned.setWorkout(workout);
+        caloriesBurned.setCustomer(customer);
+        caloriesBurned.setTrainingProgram(trainingProgram);
 
         int calculatedCalories = calculateCaloriesBurned(caloriesBurned);
         caloriesBurned.setCaloriesBurned(calculatedCalories);
@@ -64,26 +51,19 @@ public class CaloriesBurnedService {
     public CaloriesBurned updateCaloriesBurned(int id, CaloriesBurned caloriesBurnedDetails) {
         CaloriesBurned caloriesBurned = caloriesBurnedRepository.findById(id).orElse(null);
         if (caloriesBurned != null) {
-            Height height = heightRepository.findById(caloriesBurnedDetails.getHeight().getId()).orElse(null);
-            Weight weight = weightRepository.findById(caloriesBurnedDetails.getWeight().getId()).orElse(null);
-            SleepHours sleepHours = sleepHoursRepository.findById(caloriesBurnedDetails.getSleepHours().getId()).orElse(null);
-            Workouts workout = workoutRepository.findById(caloriesBurnedDetails.getWorkout().getId()).orElse(null);
+            Customer customer = customerRepository.findById(caloriesBurnedDetails.getCustomer().getId()).orElse(null);
+            TrainingPrograms trainingProgram = trainingProgramsRepository.findById(caloriesBurnedDetails.getTrainingProgram().getId()).orElse(null);
 
-            // Null kontrolü ve loglama
-            if (height == null || weight == null || sleepHours == null || workout == null) {
+            // Null check and logging
+            if (customer == null || trainingProgram == null) {
                 throw new RuntimeException("One of the related entities is not found");
             }
 
-            System.out.println("Retrieved from DB - Height: " + height.getHeight());
-            System.out.println("Retrieved from DB - Weight: " + weight.getWeight());
-            System.out.println("Retrieved from DB - Sleep Hours: " + sleepHours.getSleepHours());
-            System.out.println("Retrieved from DB - Workout Sets: " + workout.getSets());
-            System.out.println("Retrieved from DB - Workout Repeats: " + workout.getRepeats());
+            System.out.println("Retrieved from DB - Customer ID: " + customer.getId());
+            System.out.println("Retrieved from DB - Training Program ID: " + trainingProgram.getId());
 
-            caloriesBurned.setHeight(height);
-            caloriesBurned.setWeight(weight);
-            caloriesBurned.setSleepHours(sleepHours);
-            caloriesBurned.setWorkout(workout);
+            caloriesBurned.setCustomer(customer);
+            caloriesBurned.setTrainingProgram(trainingProgram);
             caloriesBurned.setDate(caloriesBurnedDetails.getDate());
 
             int calculatedCalories = calculateCaloriesBurned(caloriesBurned);
@@ -93,28 +73,31 @@ public class CaloriesBurnedService {
         return null;
     }
 
+
     public void deleteCaloriesBurned(int id) {
         caloriesBurnedRepository.deleteById(id);
     }
 
     private int calculateCaloriesBurned(CaloriesBurned caloriesBurned) {
-        double weight = caloriesBurned.getWeight().getWeight();
-        double height = caloriesBurned.getHeight().getHeight();
-        int sleepHours = caloriesBurned.getSleepHours().getSleepHours();
-        Workouts workout = caloriesBurned.getWorkout();
+        int totalCalories = 0;
 
-        // Debug çıktısı
-        System.out.println("Weight: " + weight);
-        System.out.println("Height: " + height);
-        System.out.println("Sleep Hours: " + sleepHours);
-        System.out.println("Workout Sets: " + workout.getSets());
-        System.out.println("Workout Repeats: " + workout.getRepeats());
+        // Loop through each workout in the training program
+        for (Workouts workout : caloriesBurned.getTrainingProgram().getWorkouts()) {
+            int sets = workout.getSets();
+            int repeats = workout.getRepeats();
+            Exercises exercise = workout.getExercise(); // Get the associated exercise
 
-        // Basit bir kalori hesaplama formülü
-        // Bu formül kişisel verilere göre özelleştirilebilir
-        int calories = (int) ((workout.getSets() * workout.getRepeats() * 0.1) + (weight * 0.35) + (height * 0.1) - (sleepHours * 0.5));
-        System.out.println("Calculated Calories: " + calories);
-        return calories;
+            // Calculate calories burned for this workout and add to the total
+            int calories = (int) ((sets * repeats * 0.1) + (caloriesBurned.getCustomer().getWeight() * 0.35));
+            totalCalories += calories;
+
+            // Debugging output
+            System.out.println("Workout: " + exercise.getName() + ", Sets: " + sets + ", Repeats: " + repeats);
+            System.out.println("Calories for this workout: " + calories);
+        }
+
+        System.out.println("Total Calculated Calories: " + totalCalories);
+        return totalCalories;
     }
 
 }

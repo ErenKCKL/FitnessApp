@@ -19,8 +19,12 @@ public class Workouts {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "exercises_id")
-    private Exercises exercises;
+    @JoinColumn(name = "exercises_id", nullable = false)  // Make sure this matches the database column name
+    private Exercises exercise;
+
+    @ManyToOne
+    @JoinColumn(name = "trainingprograms_id", nullable = false)
+    private TrainingPrograms trainingProgram;
 
     @Column(name = "sets")
     private int sets;

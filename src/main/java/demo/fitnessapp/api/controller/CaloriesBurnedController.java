@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/caloriesBurned")
 public class CaloriesBurnedController {
+
     @Autowired
     private CaloriesBurnedService caloriesBurnedService;
 

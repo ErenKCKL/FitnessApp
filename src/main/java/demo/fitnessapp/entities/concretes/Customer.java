@@ -23,22 +23,34 @@ public class Customer {
     @NotNull
     private int id;
 
+
     @Column(name = "email")
     private String email;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "phonenumber")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "dateofbirth")
-    private LocalDate dateOfBirth;
+    @Column(name = "age")
+    private int age;
+
+    @Column(name = "height")
+    private double height;
+
+    @Column(name = "weight")
+    private double weight;
+
+    @Column(name = "heart_rate")
+    private double heartRate;
+
+    @Column(name = "sleep_hours")
+    private int sleepHours;
 
     @Column(name = "steps")
     private int steps;
 
-    @Column(name = "heartrate")
-    private double heartRate;
+
 
 }

@@ -5,15 +5,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "caloriesburned")
+@Table(name = "trainingprograms")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class CaloriesBurned {
+public class TrainingPrograms {
 
     @Id
     @Column(name = "id")
@@ -21,17 +22,12 @@ public class CaloriesBurned {
     @NotNull
     private int id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "date")
     private LocalDate date;
 
-    @ManyToOne
-    @JoinColumn(name = "customers_id", nullable = false)
-    private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "trainingprograms_id", nullable = false)
-    private TrainingPrograms trainingProgram;
-
-    @Column(name = "caloriesburned")
-    private int caloriesBurned;
+    @OneToMany(mappedBy = "trainingProgram", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Workouts> workouts;
 }
