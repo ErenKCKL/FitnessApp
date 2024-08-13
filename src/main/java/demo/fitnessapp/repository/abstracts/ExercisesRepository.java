@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface ExercisesRepository extends JpaRepository<Exercises, Integer> {
 
-
 }

@@ -28,7 +28,7 @@ public class WorkoutsService {
     public Workouts updateWorkout(int id, Workouts workoutsDetail){
         Workouts workouts = workoutsRepository.findById(id).orElse(null);
         if (workouts != null) {
-            workouts.setExercise(workoutsDetail.getExercise());
+            workouts.setTrainingProgram(workoutsDetail.getTrainingProgram());
             workouts.setSets(workoutsDetail.getSets());
             workouts.setRepeats(workoutsDetail.getRepeats());
             return workoutsRepository.save(workouts);

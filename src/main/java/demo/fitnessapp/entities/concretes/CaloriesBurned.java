@@ -7,31 +7,28 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Data
-@Entity
-@Table(name = "caloriesburned")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Builder
+@Entity
+@Table(name = "calories_burned")
 @Setter
 public class CaloriesBurned {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private int id;
 
-    @Column(name = "date")
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "customers_id", nullable = false)
-    private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "trainingprograms_id", nullable = false)
+    @JoinColumn(name = "training_programs_id")
     private TrainingPrograms trainingProgram;
 
-    @Column(name = "caloriesburned")
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     private int caloriesBurned;
+
 }

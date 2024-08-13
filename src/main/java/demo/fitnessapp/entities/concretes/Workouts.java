@@ -14,23 +14,19 @@ import lombok.*;
 public class Workouts {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private int sets;
+    private int repeats;
+
     @ManyToOne
-    @JoinColumn(name = "exercises_id", nullable = false)  // Make sure this matches the database column name
+    @JoinColumn(name = "exercises_id")
     private Exercises exercise;
 
     @ManyToOne
-    @JoinColumn(name = "trainingprograms_id", nullable = false)
+    @JoinColumn(name = "training_programs_id")
     private TrainingPrograms trainingProgram;
-
-    @Column(name = "sets")
-    private int sets;
-
-    @Column(name = "repeats")
-    private int repeats;
     
 
 }

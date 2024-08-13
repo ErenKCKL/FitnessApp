@@ -9,25 +9,22 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "trainingprograms")
+@Table(name = "training_programs")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class TrainingPrograms {
 
+
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private int id;
 
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "date")
     private LocalDate date;
 
-    @OneToMany(mappedBy = "trainingProgram", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "trainingProgram")
     private List<Workouts> workouts;
 }

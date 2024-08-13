@@ -13,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Exercises {
 
     @Id
@@ -21,7 +22,6 @@ public class Exercises {
     @NotNull
     private int id;
 
-    @Column(name = "name")
     private String name;
 
 }
